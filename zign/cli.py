@@ -8,6 +8,7 @@ import zign
 import stups_cli.config
 from .api import get_token_implicit_flow, get_tokens, AuthenticationFailed
 from .config import CONFIG_NAME, TOKENS_FILE_PATH
+from lockfile import locked
 
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -27,6 +28,7 @@ def print_version(ctx, param, value):
 @click.option('-V', '--version', is_flag=True, callback=print_version, expose_value=False, is_eager=True,
               help='Print the current version number and exit.')
 @click.pass_context
+@locked('/tmp/ztoken.lock')
 def cli(ctx):
     ctx.obj = stups_cli.config.load_config(CONFIG_NAME)
 
